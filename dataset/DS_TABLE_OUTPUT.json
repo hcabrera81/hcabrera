@@ -1,0 +1,16 @@
+{
+	"name": "DS_TABLE_OUTPUT",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AZURE_SQL",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "HC_EVO_CARTERA"
+		}
+	}
+}

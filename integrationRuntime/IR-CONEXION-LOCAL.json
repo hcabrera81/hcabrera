@@ -1,0 +1,7 @@
+{
+	"name": "IR-CONEXION-LOCAL",
+	"properties": {
+		"type": "SelfHosted",
+		"description": "Integration Runtime Local conexion hacia maquina local"
+	}
+}

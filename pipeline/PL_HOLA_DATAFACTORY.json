@@ -1,0 +1,24 @@
+{
+	"name": "PL_HOLA_DATAFACTORY",
+	"properties": {
+		"description": "Ejemplo de uso de variables",
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "SALUDO",
+					"value": "HOLA DATAFACTORY"
+				}
+			}
+		],
+		"variables": {
+			"SALUDO": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}

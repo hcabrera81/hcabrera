@@ -1,0 +1,9 @@
+{
+	"name": "adf-henry-cabrera",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "11627698-a039-4b66-9d78-34ce8c281ce7",
+		"tenantId": "9db1434a-6665-4aba-a06d-96089310a627"
+	}
+}

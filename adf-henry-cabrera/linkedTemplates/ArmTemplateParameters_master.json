@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-henry-cabrera"
+		},
+		"LS_AZURE_SQL_connectionString": {
+			"value": ""
+		},
+		"LS_DATALAKE_HC_accountKey": {
+			"value": ""
+		},
+		"LS_AZURE_VAULT_properties_typeProperties_baseUrl": {
+			"value": "https://kv-bigdata-train-dev.vault.azure.net/"
+		},
+		"LS_DATALAKE_HC_properties_typeProperties_url": {
+			"value": "https://dlscursogrm.dfs.core.windows.net/"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

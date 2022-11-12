@@ -1,0 +1,22 @@
+{
+	"name": "DS_EVO_CART",
+	"properties": {
+		"description": "Archivo Evo Cartera GIG",
+		"linkedServiceName": {
+			"referenceName": "LS_DATALAKE_HC",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "CONSOLIDADO GRA",
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "EvolucióndeCarteraGIG_loaded.xlsx",
+				"fileSystem": "hcabrera"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": []
+	}
+}

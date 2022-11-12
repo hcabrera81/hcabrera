@@ -1,0 +1,10 @@
+{
+	"name": "LS_AZURE_VAULT",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://kv-bigdata-train-dev.vault.azure.net/"
+		}
+	}
+}

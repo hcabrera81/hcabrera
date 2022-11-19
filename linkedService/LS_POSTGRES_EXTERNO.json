@@ -1,0 +1,16 @@
+{
+	"name": "LS_POSTGRES_EXTERNO",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "PostgreSql",
+		"typeProperties": {
+			"connectionString": "host=localhost;port=5432;database=curso;uid=postgres;encryptionmethod=0",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI1ODcxZDVkMC0zOWU2LTRiOTQtOWVhOC0wYjA0MGMxNWU3NjIiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "LINKED-CONEX-INSTRUCTOR",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

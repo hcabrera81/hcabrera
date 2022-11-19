@@ -1,5 +1,13 @@
 {
 	"name": "adf-henry-cabrera",
+	"properties": {
+		"globalParameters": {
+			"utc_ec": {
+				"type": "int",
+				"value": -5
+			}
+		}
+	},
 	"location": "eastus",
 	"identity": {
 		"type": "SystemAssigned",

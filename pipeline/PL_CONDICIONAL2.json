@@ -1,9 +1,23 @@
 {
 	"name": "PL_CONDICIONAL2",
 	"properties": {
+		"activities": [
+			{
+				"name": "If Condition1",
+				"type": "IfCondition",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(mod(pipeline().parameters.numero,2),0)",
+						"type": "Expression"
+					}
+				}
+			}
+		],
 		"parameters": {
 			"numero": {
-				"type": "string"
+				"type": "int"
 			}
 		},
 		"variables": {

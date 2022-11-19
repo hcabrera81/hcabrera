@@ -1,0 +1,29 @@
+{
+	"name": "PL_FOREACH",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set lista",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "listaValores",
+					"value": {
+						"value": "@range(1,5)",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"listaValores": {
+				"type": "Array"
+			}
+		},
+		"folder": {
+			"name": "INTERACCION Y FLUJO"
+		},
+		"annotations": []
+	}
+}

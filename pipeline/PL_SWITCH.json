@@ -12,6 +12,22 @@
 				}
 			}
 		],
+		"parameters": {
+			"operacion": {
+				"type": "string"
+			},
+			"a": {
+				"type": "int"
+			},
+			"b": {
+				"type": "int"
+			}
+		},
+		"variables": {
+			"resultado": {
+				"type": "String"
+			}
+		},
 		"folder": {
 			"name": "INTERACCION Y FLUJO"
 		},

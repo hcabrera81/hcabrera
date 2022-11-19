@@ -1,0 +1,21 @@
+{
+	"name": "DS_PARQUET_OUT",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_DATALAKE_HC",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "ejemploComp.parquet",
+				"folderPath": "ARCHIVOS_LOCALES",
+				"fileSystem": "hcabrera"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}

@@ -1,0 +1,19 @@
+{
+	"name": "PL_CONDICIONAL2",
+	"properties": {
+		"parameters": {
+			"numero": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"resultado": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "INTERACCION Y FLUJO"
+		},
+		"annotations": []
+	}
+}

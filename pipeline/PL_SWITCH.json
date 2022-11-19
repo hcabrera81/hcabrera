@@ -35,7 +35,7 @@
 							"value": "restar",
 							"activities": [
 								{
-									"name": "Set variable1",
+									"name": "Set restar",
 									"type": "SetVariable",
 									"dependsOn": [],
 									"userProperties": [],

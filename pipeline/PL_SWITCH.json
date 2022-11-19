@@ -32,7 +32,22 @@
 							]
 						},
 						{
-							"value": "restar"
+							"value": "restar",
+							"activities": [
+								{
+									"name": "Set variable1",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "resultado",
+										"value": {
+											"value": "@string(sub(pipeline().parameters.a,pipeline().parameters.b))",
+											"type": "Expression"
+										}
+									}
+								}
+							]
 						},
 						{
 							"value": "multiplicar"

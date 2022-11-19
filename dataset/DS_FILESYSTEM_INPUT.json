@@ -8,6 +8,7 @@
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
+			"sheetName": "Ventas sin CV asociado",
 			"location": {
 				"type": "FileServerLocation",
 				"fileName": "Ventas_Graiman_Marzo 2022.xlsx"

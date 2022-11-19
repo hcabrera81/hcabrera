@@ -14,7 +14,22 @@
 					},
 					"cases": [
 						{
-							"value": "sumar"
+							"value": "sumar",
+							"activities": [
+								{
+									"name": "sumar",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "resultado",
+										"value": {
+											"value": "@string(add(pipeline().parameters.a,pipeline().parameters.b))",
+											"type": "Expression"
+										}
+									}
+								}
+							]
 						},
 						{
 							"value": "restar"

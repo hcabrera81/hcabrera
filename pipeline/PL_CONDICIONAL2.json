@@ -32,7 +32,10 @@
 							"userProperties": [],
 							"typeProperties": {
 								"variableName": "resultado",
-								"value": "ES Par"
+								"value": {
+									"value": "EL numero @{pipeline().parameters.numero} es variables('resultado')",
+									"type": "Expression"
+								}
 							}
 						}
 					]

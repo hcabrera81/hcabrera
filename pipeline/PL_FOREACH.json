@@ -42,7 +42,7 @@
 							"typeProperties": {
 								"variableName": "auxiliar",
 								"value": {
-									"value": "@item()",
+									"value": "@string(item())",
 									"type": "Expression"
 								}
 							}

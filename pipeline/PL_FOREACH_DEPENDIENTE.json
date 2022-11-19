@@ -62,7 +62,7 @@
 								"source": {
 									"type": "AzureSqlSource",
 									"sqlReaderQuery": {
-										"value": "SELECT * FROM dbo.Factura\nWHERE YEAR(fechaFactura)=@{item().anioitem}",
+										"value": "SELECT * FROM dbo.Factura\nWHERE YEAR(fechaFactura)=@{item().item}",
 										"type": "Expression"
 									},
 									"queryTimeout": "02:00:00",
@@ -103,7 +103,7 @@
 											"type": "Expression"
 										},
 										"nombrearchivo": {
-											"value": "facturas_@{item().anioitem}.parquet",
+											"value": "facturas_@{item().item}.parquet",
 											"type": "Expression"
 										}
 									}

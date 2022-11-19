@@ -27,6 +27,91 @@
 					},
 					"firstRowOnly": false
 				}
+			},
+			{
+				"name": "IterarAnios",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Generar Rango de iteraccion",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Generar Rango de iteraccion').output.value",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Copy datos por anio",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"sqlReaderQuery": {
+										"value": "SELECT * FROM dbo.Factura\nWHERE YEAR(fechaFactura)=@{item().anioitem}",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "ParquetSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "ParquetWriteSettings"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_AZURE_INPUT",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_PARQUET_GENERICO_HC",
+									"type": "DatasetReference",
+									"parameters": {
+										"directorio": {
+											"value": "FACTURAS/@{item().anioitem}",
+											"type": "Expression"
+										},
+										"nombrearchivo": {
+											"value": "facturas_@{item().anioitem}.parquet",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
 			}
 		],
 		"folder": {

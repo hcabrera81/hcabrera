@@ -10,7 +10,20 @@
 				"typeProperties": {
 					"variableName": "saludo",
 					"value": {
-						"value": "Hola @{pipeline().parameters.nombre},\r\nZona horaria: @{pipeline().globalParameters.utc_ec}",
+						"value": "Hola @{pipeline().parameters.nombre},\nZona horaria: @{pipeline().globalParameters.utc_ec}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set variable2",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "saludo",
+					"value": {
+						"value": "@concat('Hola ',pipeline().parameters.nombre,'Zona Horaria:',string(pipeline().globalParameters.utc_ec))",
 						"type": "Expression"
 					}
 				}

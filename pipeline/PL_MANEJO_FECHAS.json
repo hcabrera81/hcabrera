@@ -47,6 +47,26 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set InicioMes",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "finmes",
+					"value": {
+						"value": "@addToTime(variables('iniciomes'),1,'Month')",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"variables": {

@@ -10,7 +10,7 @@
 				"typeProperties": {
 					"variableName": "fechaActual",
 					"value": {
-						"value": "@utcNow()",
+						"value": "@addhours(utcNow(),pipeline().globalParameters.utc_ec)",
 						"type": "Expression"
 					}
 				}

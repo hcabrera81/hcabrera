@@ -99,11 +99,11 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"directorio": {
-											"value": "FACTURAS/@{item().anioitem}",
+											"value": "FACTURAS/@{item().anio}",
 											"type": "Expression"
 										},
 										"nombrearchivo": {
-											"value": "facturas_@{item().item}.parquet",
+											"value": "facturas_@{item().anio}.parquet",
 											"type": "Expression"
 										}
 									}

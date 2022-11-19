@@ -13,6 +13,11 @@
 				}
 			}
 		],
+		"parameters": {
+			"nombre": {
+				"type": "string"
+			}
+		},
 		"variables": {
 			"saludo": {
 				"type": "String",

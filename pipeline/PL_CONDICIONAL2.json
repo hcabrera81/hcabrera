@@ -12,6 +12,18 @@
 						"value": "@equals(mod(pipeline().parameters.numero,2),0)",
 						"type": "Expression"
 					},
+					"ifFalseActivities": [
+						{
+							"name": "Set esImpar",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "resultado",
+								"value": "Es Impar"
+							}
+						}
+					],
 					"ifTrueActivities": [
 						{
 							"name": "Set esPar",

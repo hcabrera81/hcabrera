@@ -10,7 +10,7 @@
 				"typeProperties": {
 					"variableName": "saludo",
 					"value": {
-						"value": "@pipeline().parameters.nombre",
+						"value": "Hola @{pipeline().parameters.nombre},\r\nZona horaria: @{pipeline().globalParameters.utc_ec}",
 						"type": "Expression"
 					}
 				}

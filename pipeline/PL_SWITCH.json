@@ -53,7 +53,7 @@
 							"value": "multiplicar",
 							"activities": [
 								{
-									"name": "Set variable2",
+									"name": "Set mult",
 									"type": "SetVariable",
 									"dependsOn": [],
 									"userProperties": [],

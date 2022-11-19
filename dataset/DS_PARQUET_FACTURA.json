@@ -15,6 +15,35 @@
 			},
 			"compressionCodec": "snappy"
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "idFactura",
+				"type": "INT32"
+			},
+			{
+				"name": "idCliente",
+				"type": "INT32"
+			},
+			{
+				"name": "idEmpleado",
+				"type": "INT32"
+			},
+			{
+				"name": "fechaFactura",
+				"type": "INT96"
+			},
+			{
+				"name": "subtotal",
+				"type": "DECIMAL",
+				"precision": 15,
+				"scale": 2
+			},
+			{
+				"name": "impuestos",
+				"type": "DECIMAL",
+				"precision": 15,
+				"scale": 2
+			}
+		]
 	}
 }

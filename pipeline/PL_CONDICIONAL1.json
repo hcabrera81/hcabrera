@@ -1,6 +1,37 @@
 {
 	"name": "PL_CONDICIONAL1",
 	"properties": {
+		"activities": [
+			{
+				"name": "If Condition1",
+				"type": "IfCondition",
+				"dependsOn": [],
+				"userProperties": []
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "resultado",
+					"value": {
+						"value": "@string(equals(mod(pipeline().parameters.numero,2),0))",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"numero": {
+				"type": "int"
+			}
+		},
+		"variables": {
+			"resultado": {
+				"type": "String"
+			}
+		},
 		"folder": {
 			"name": "INTERACCION Y FLUJO"
 		},

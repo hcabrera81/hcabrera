@@ -6,9 +6,21 @@
 				"name": "Set fechaActual",
 				"type": "SetVariable",
 				"dependsOn": [],
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "fechaActual",
+					"value": {
+						"value": "@utcNow()",
+						"type": "Expression"
+					}
+				}
 			}
 		],
+		"variables": {
+			"fechaActual": {
+				"type": "String"
+			}
+		},
 		"folder": {
 			"name": "INTERACCION Y FLUJO"
 		},

@@ -8,7 +8,21 @@
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
-					"cases": []
+					"on": {
+						"value": "@pipeline().parameters.operacion",
+						"type": "Expression"
+					},
+					"cases": [
+						{
+							"value": "sumar"
+						},
+						{
+							"value": "restar"
+						},
+						{
+							"value": "multiplicar"
+						}
+					]
 				}
 			}
 		],

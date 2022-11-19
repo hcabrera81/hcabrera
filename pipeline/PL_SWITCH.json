@@ -50,7 +50,22 @@
 							]
 						},
 						{
-							"value": "multiplicar"
+							"value": "multiplicar",
+							"activities": [
+								{
+									"name": "Set variable2",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "resultado",
+										"value": {
+											"value": "@string(mul(pipeline().parameters.a,pipeline().parameters.b))",
+											"type": "Expression"
+										}
+									}
+								}
+							]
 						}
 					]
 				}

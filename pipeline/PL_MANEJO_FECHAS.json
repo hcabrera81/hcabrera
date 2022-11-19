@@ -36,19 +36,6 @@
 				}
 			},
 			{
-				"name": "Set InicioMes_copy1",
-				"type": "SetVariable",
-				"dependsOn": [],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "iniciomes",
-					"value": {
-						"value": "@startOfMonth(addhours(utcnow(),pipeline().globalParameters.utc_ec))",
-						"type": "Expression"
-					}
-				}
-			},
-			{
 				"name": "Set variable1",
 				"type": "SetVariable",
 				"dependsOn": [

@@ -1,0 +1,14 @@
+{
+	"name": "PL_VARIABLES",
+	"properties": {
+		"variables": {
+			"saludo": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "INTERACCION Y FLUJO"
+		},
+		"annotations": []
+	}
+}

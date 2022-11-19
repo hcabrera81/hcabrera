@@ -9,7 +9,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "saludo",
-					"value": "Hola DataFactory"
+					"value": {
+						"value": "@pipeline().parameters.nombre",
+						"type": "Expression"
+					}
 				}
 			}
 		],

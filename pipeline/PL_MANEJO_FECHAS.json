@@ -1,0 +1,17 @@
+{
+	"name": "PL_MANEJO_FECHAS",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set fechaActual",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": []
+			}
+		],
+		"folder": {
+			"name": "INTERACCION Y FLUJO"
+		},
+		"annotations": []
+	}
+}

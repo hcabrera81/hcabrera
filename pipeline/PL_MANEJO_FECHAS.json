@@ -19,6 +19,9 @@
 		"variables": {
 			"fechaActual": {
 				"type": "String"
+			},
+			"iniciomes": {
+				"type": "String"
 			}
 		},
 		"folder": {

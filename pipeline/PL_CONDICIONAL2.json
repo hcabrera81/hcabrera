@@ -11,7 +11,19 @@
 					"expression": {
 						"value": "@equals(mod(pipeline().parameters.numero,2),0)",
 						"type": "Expression"
-					}
+					},
+					"ifTrueActivities": [
+						{
+							"name": "Set esPar",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "resultado",
+								"value": "ES Par"
+							}
+						}
+					]
 				}
 			}
 		],

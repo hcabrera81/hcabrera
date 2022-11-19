@@ -1,0 +1,101 @@
+{
+	"name": "DS_FILESYSTEM_INPUT",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_FILESYSTEM1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Ventas sin CV asociado",
+			"location": {
+				"type": "FileServerLocation",
+				"fileName": "Ventas Graiman_Marzo 2022.xlsx"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "Unidad de Negocio",
+				"type": "String"
+			},
+			{
+				"name": "Número Identificación",
+				"type": "String"
+			},
+			{
+				"name": "Nombre Comercial",
+				"type": "String"
+			},
+			{
+				"name": "Canal Atención",
+				"type": "String"
+			},
+			{
+				"name": "Estado Inventario",
+				"type": "String"
+			},
+			{
+				"name": "Tipo Inventario",
+				"type": "String"
+			},
+			{
+				"name": "Marca",
+				"type": "String"
+			},
+			{
+				"name": "Formato",
+				"type": "String"
+			},
+			{
+				"name": "Código Producto",
+				"type": "String"
+			},
+			{
+				"name": "Nombre",
+				"type": "String"
+			},
+			{
+				"name": "Línea Negocio",
+				"type": "String"
+			},
+			{
+				"name": "Familia",
+				"type": "String"
+			},
+			{
+				"name": "Año",
+				"type": "String"
+			},
+			{
+				"name": "Mes (1-12)",
+				"type": "String"
+			},
+			{
+				"name": "Tipo Documento",
+				"type": "String"
+			},
+			{
+				"name": "Número Documento",
+				"type": "String"
+			},
+			{
+				"name": "Precio Unitario",
+				"type": "String"
+			},
+			{
+				"name": "Cantidad",
+				"type": "String"
+			},
+			{
+				"name": "Costo Neto",
+				"type": "String"
+			},
+			{
+				"name": "Venta Neta",
+				"type": "String"
+			}
+		]
+	}
+}

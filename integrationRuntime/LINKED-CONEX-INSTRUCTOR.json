@@ -1,0 +1,13 @@
+{
+	"name": "LINKED-CONEX-INSTRUCTOR",
+	"properties": {
+		"type": "SelfHosted",
+		"description": "LS Conectar Runtime Externo",
+		"typeProperties": {
+			"linkedInfo": {
+				"resourceId": "/subscriptions/9afd9057-d72e-4a1b-aa72-71210e2ea61d/resourcegroups/gr_cursobigdata_dev/providers/Microsoft.DataFactory/factories/adf-instructor/integrationruntimes/IR-CONEXION-LOCAL",
+				"authorizationType": "Rbac"
+			}
+		}
+	}
+}

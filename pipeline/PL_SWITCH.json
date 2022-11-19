@@ -1,0 +1,20 @@
+{
+	"name": "PL_SWITCH",
+	"properties": {
+		"activities": [
+			{
+				"name": "Switch1",
+				"type": "Switch",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"cases": []
+				}
+			}
+		],
+		"folder": {
+			"name": "INTERACCION Y FLUJO"
+		},
+		"annotations": []
+	}
+}

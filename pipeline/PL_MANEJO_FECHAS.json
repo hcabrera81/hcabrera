@@ -50,7 +50,7 @@
 				"typeProperties": {
 					"variableName": "finmes",
 					"value": {
-						"value": "@addToTime(variables('iniciomes'),1,'Month')",
+						"value": "@addToTime(addToTime(variables('iniciomes'), 1,'Month' ),-1 ,'Day' )",
 						"type": "Expression"
 					}
 				}

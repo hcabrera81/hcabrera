@@ -4,16 +4,16 @@
 	"parameters": {
 		"factoryName": {
 			"type": "string",
-			"metadata": "Data Factory name",
+			"metadata": "Nombre de instancia de Data Factory",
 			"defaultValue": "adf-henry-cabrera"
 		},
 		"LS_AZURE_SQL_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'LS_AZURE_SQL'"
+			"metadata": "Cadena protegida para \"connectionString\"de \"LS_AZURE_SQL\""
 		},
 		"LS_DATALAKE_HC_accountKey": {
 			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'LS_DATALAKE_HC'"
+			"metadata": "Cadena protegida para \"accountKey\"de \"LS_DATALAKE_HC\""
 		},
 		"LS_AZURE_VAULT_properties_typeProperties_baseUrl": {
 			"type": "string",
@@ -22,12 +22,250 @@
 		"LS_DATALAKE_HC_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://dlscursogrm.dfs.core.windows.net/"
+		},
+		"LINKED-CONEX-INSTRUCTOR_properties_typeProperties_linkedInfo_resourceId": {
+			"type": "string",
+			"defaultValue": "/subscriptions/9afd9057-d72e-4a1b-aa72-71210e2ea61d/resourcegroups/gr_cursobigdata_dev/providers/Microsoft.DataFactory/factories/adf-instructor/integrationruntimes/IR-CONEXION-LOCAL"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_CONDICIONAL1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "If Condition1",
+						"type": "IfCondition",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@equals(mod(pipeline().parameters.numero,2),0)",
+								"type": "Expression"
+							},
+							"ifFalseActivities": [
+								{
+									"name": "Set esImpar",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "resultado",
+										"value": {
+											"value": "EL numero @{pipeline().parameters.numero} es variables('resultado')",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"ifTrueActivities": [
+								{
+									"name": "Set esPar",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "resultado",
+										"value": {
+											"value": "EL numero @{pipeline().parameters.numero} es variables('resultado')",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "resultado",
+							"value": {
+								"value": "@string(equals(mod(pipeline().parameters.numero,2),0))",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"numero": {
+						"type": "int"
+					}
+				},
+				"variables": {
+					"resultado": {
+						"type": "String"
+					},
+					"var": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "INTERACCION Y FLUJO"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_CONDICIONAL2')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "If Condition1",
+						"type": "IfCondition",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@equals(mod(pipeline().parameters.numero,2),0)",
+								"type": "Expression"
+							},
+							"ifFalseActivities": [
+								{
+									"name": "Set esImpar",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "resultado",
+										"value": "Es Impar"
+									}
+								}
+							],
+							"ifTrueActivities": [
+								{
+									"name": "Set esPar",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "resultado",
+										"value": {
+											"value": "EL numero @{pipeline().parameters.numero} es variables('resultado')",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"numero": {
+						"type": "int"
+					}
+				},
+				"variables": {
+					"resultado": {
+						"type": "String"
+					},
+					"var": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "INTERACCION Y FLUJO"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_FOREACH')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Set lista",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "listaValores",
+							"value": {
+								"value": "@range(1,5)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Set lista",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@variables('listaValores')",
+								"type": "Expression"
+							},
+							"isSequential": false,
+							"batchCount": 2,
+							"activities": [
+								{
+									"name": "Set variable1",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "auxiliar",
+										"value": {
+											"value": "@string(item())",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"listaValores": {
+						"type": "Array"
+					},
+					"acumulador": {
+						"type": "String"
+					},
+					"auxiliar": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "INTERACCION Y FLUJO"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/PL_HOLA_DATAFACTORY')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
@@ -54,6 +292,278 @@
 					"SALUDO": {
 						"type": "String"
 					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_LECTURA_PARQUET')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "var",
+							"value": "1"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"var": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "INTERACCION Y FLUJO"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_MANEJO_FECHAS')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Set fechaActual",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "fechaActual",
+							"value": {
+								"value": "@addhours(utcNow(),pipeline().globalParameters.utc_ec)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Set InicioMes",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Set fechaActual",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "iniciomes",
+							"value": {
+								"value": "@startOfMonth(variables('fechaActual'))",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Set FinMes",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Set InicioMes",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "finmes",
+							"value": {
+								"value": "@formatDateTime(addToTime(addToTime(variables('iniciomes'), 1,'Month' ),-1 ,'Day' ), 'yyyy-MM-dd HH:mm:ss')",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"fechaActual": {
+						"type": "String"
+					},
+					"iniciomes": {
+						"type": "String"
+					},
+					"finmes": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "INTERACCION Y FLUJO"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_SWITCH')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Switch1",
+						"type": "Switch",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"on": {
+								"value": "@pipeline().parameters.operacion",
+								"type": "Expression"
+							},
+							"cases": [
+								{
+									"value": "sumar",
+									"activities": [
+										{
+											"name": "sumar",
+											"type": "SetVariable",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"variableName": "resultado",
+												"value": {
+													"value": "@string(add(pipeline().parameters.a,pipeline().parameters.b))",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								},
+								{
+									"value": "restar",
+									"activities": [
+										{
+											"name": "Set restar",
+											"type": "SetVariable",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"variableName": "resultado",
+												"value": {
+													"value": "@string(sub(pipeline().parameters.a,pipeline().parameters.b))",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								},
+								{
+									"value": "multiplicar",
+									"activities": [
+										{
+											"name": "Set mult",
+											"type": "SetVariable",
+											"dependsOn": [],
+											"userProperties": [],
+											"typeProperties": {
+												"variableName": "resultado",
+												"value": {
+													"value": "@string(mul(pipeline().parameters.a,pipeline().parameters.b))",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"operacion": {
+						"type": "string"
+					},
+					"a": {
+						"type": "int"
+					},
+					"b": {
+						"type": "int"
+					}
+				},
+				"variables": {
+					"resultado": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "INTERACCION Y FLUJO"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_VARIABLES')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "saludo",
+							"value": {
+								"value": "Hola @{pipeline().parameters.nombre},\nZona horaria: @{pipeline().globalParameters.utc_ec}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Set variable2",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "saludo",
+							"value": {
+								"value": "@concat('Hola ',pipeline().parameters.nombre,'Zona Horaria:',string(pipeline().globalParameters.utc_ec))",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"nombre": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"saludo": {
+						"type": "String",
+						"defaultValue": "DataFactory"
+					}
+				},
+				"folder": {
+					"name": "INTERACCION Y FLUJO"
 				},
 				"annotations": []
 			},
@@ -116,6 +626,132 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/LINKED-CONEX-INSTRUCTOR')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"description": "LS Conectar Runtime Externo",
+				"typeProperties": {
+					"linkedInfo": {
+						"resourceId": "[parameters('LINKED-CONEX-INSTRUCTOR_properties_typeProperties_linkedInfo_resourceId')]",
+						"authorizationType": "Rbac"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_EJECUTAR_SP1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Stored procedure1",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Saludar]",
+							"storedProcedureParameters": {
+								"nombre": {
+									"value": "DataFactoryH",
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "LS_AZURE_SQL",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "INTERACCION Y FLUJO"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AZURE_SQL')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_EJECUTAR_SP2')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Script1",
+						"type": "Script",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "LS_AZURE_SQL",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": "EXECUTE dbo.Saludar 'Data Factory'"
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "INTERACCION Y FLUJO"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AZURE_SQL')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_AZURE_INPUT')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AZURE_SQL",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AZURE_SQL')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DS_EVO_CART')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -143,95 +779,123 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DS_TABLE_OUTPUT')]",
+			"name": "[concat(parameters('factoryName'), '/DS_PARQUET_FACTURA')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "LS_AZURE_SQL",
+					"referenceName": "LS_DATALAKE_HC",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
+				"type": "Parquet",
 				"typeProperties": {
-					"schema": "dbo",
-					"table": "HC_EVO_CARTERA"
-				}
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "FACTURAS",
+						"fileSystem": "hcabrera"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "idFactura",
+						"type": "INT32"
+					},
+					{
+						"name": "idCliente",
+						"type": "INT32"
+					},
+					{
+						"name": "idEmpleado",
+						"type": "INT32"
+					},
+					{
+						"name": "fechaFactura",
+						"type": "INT96"
+					},
+					{
+						"name": "subtotal",
+						"type": "DECIMAL",
+						"precision": 15,
+						"scale": 2
+					},
+					{
+						"name": "impuestos",
+						"type": "DECIMAL",
+						"precision": 15,
+						"scale": 2
+					}
+				]
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AZURE_SQL')]"
+				"[concat(variables('factoryId'), '/linkedServices/LS_DATALAKE_HC')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/PL_COPIAR_ARCHIVO')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
+			"name": "[concat(parameters('factoryName'), '/DS_PARQUET_GENERICO_HC')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"activities": [
-					{
-						"name": "Copy data1",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "ExcelSource",
-								"storeSettings": {
-									"type": "AzureBlobFSReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								}
-							},
-							"sink": {
-								"type": "AzureSqlSink",
-								"writeBehavior": "insert",
-								"sqlWriterUseTableLock": false,
-								"tableOption": "autoCreate",
-								"disableMetricsCollection": false
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "DS_EVO_CART",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "DS_TABLE_OUTPUT",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
+				"linkedServiceName": {
+					"referenceName": "LS_DATALAKE_HC",
+					"type": "LinkedServiceReference"
 				},
-				"annotations": []
+				"parameters": {
+					"directorio": {
+						"type": "string"
+					},
+					"nombrearchivo": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().nombrearchivo",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@dataset().directorio",
+							"type": "Expression"
+						},
+						"fileSystem": "hcabrera"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_EVO_CART')]",
-				"[concat(variables('factoryId'), '/datasets/DS_TABLE_OUTPUT')]"
+				"[concat(variables('factoryId'), '/linkedServices/LS_DATALAKE_HC')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_PARQUET_OUT')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_DATALAKE_HC",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "ejemploComp.parquet",
+						"folderPath": "ARCHIVOS_LOCALES",
+						"fileSystem": "hcabrera"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_DATALAKE_HC')]"
 			]
 		}
 	]

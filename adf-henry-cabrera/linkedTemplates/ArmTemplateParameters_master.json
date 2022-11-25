@@ -11,11 +11,26 @@
 		"LS_DATALAKE_HC_accountKey": {
 			"value": ""
 		},
+		"LS_FILESYSTEM1_password": {
+			"value": ""
+		},
+		"LS_POSTGRES_EXTERNO_connectionString": {
+			"value": ""
+		},
 		"LS_AZURE_VAULT_properties_typeProperties_baseUrl": {
 			"value": "https://kv-bigdata-train-dev.vault.azure.net/"
 		},
 		"LS_DATALAKE_HC_properties_typeProperties_url": {
 			"value": "https://dlscursogrm.dfs.core.windows.net/"
+		},
+		"LS_FILESYSTEM1_properties_typeProperties_host": {
+			"value": "\\\\5HCABRERA141\\Users\\hcabrera\\"
+		},
+		"LS_FILESYSTEM1_properties_typeProperties_userId": {
+			"value": "GRAIMAN\\hcabrera"
+		},
+		"LINKED-CONEX-INSTRUCTOR_properties_typeProperties_linkedInfo_resourceId": {
+			"value": "/subscriptions/9afd9057-d72e-4a1b-aa72-71210e2ea61d/resourcegroups/gr_cursobigdata_dev/providers/Microsoft.DataFactory/factories/adf-instructor/integrationruntimes/IR-CONEXION-LOCAL"
 		},
 		"containerUri": {
 			"value": ""

@@ -4,16 +4,24 @@
 	"parameters": {
 		"factoryName": {
 			"type": "string",
-			"metadata": "Data Factory name",
+			"metadata": "Nombre de instancia de Data Factory",
 			"defaultValue": "adf-henry-cabrera"
 		},
 		"LS_AZURE_SQL_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'LS_AZURE_SQL'"
+			"metadata": "Cadena protegida para \"connectionString\"de \"LS_AZURE_SQL\""
 		},
 		"LS_DATALAKE_HC_accountKey": {
 			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'LS_DATALAKE_HC'"
+			"metadata": "Cadena protegida para \"accountKey\"de \"LS_DATALAKE_HC\""
+		},
+		"LS_FILESYSTEM1_password": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"password\"de \"LS_FILESYSTEM1\""
+		},
+		"LS_POSTGRES_EXTERNO_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"LS_POSTGRES_EXTERNO\""
 		},
 		"LS_AZURE_VAULT_properties_typeProperties_baseUrl": {
 			"type": "string",
@@ -23,13 +31,25 @@
 			"type": "string",
 			"defaultValue": "https://dlscursogrm.dfs.core.windows.net/"
 		},
+		"LS_FILESYSTEM1_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "\\\\5HCABRERA141\\Users\\hcabrera\\"
+		},
+		"LS_FILESYSTEM1_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "GRAIMAN\\hcabrera"
+		},
+		"LINKED-CONEX-INSTRUCTOR_properties_typeProperties_linkedInfo_resourceId": {
+			"type": "string",
+			"defaultValue": "/subscriptions/9afd9057-d72e-4a1b-aa72-71210e2ea61d/resourcegroups/gr_cursobigdata_dev/providers/Microsoft.DataFactory/factories/adf-instructor/integrationruntimes/IR-CONEXION-LOCAL"
+		},
 		"containerUri": {
 			"type": "string",
-			"metadata": "URI to storage account containing linked ARM templates"
+			"metadata": "URI de la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas."
 		},
 		"containerSasToken": {
 			"type": "string",
-			"metadata": "Sas token to storage account containing linked ARM templates"
+			"metadata": "Token de SAS para la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas"
 		}
 	},
 	"variables": {
@@ -61,10 +81,45 @@
 					},
 					"LS_DATALAKE_HC_properties_typeProperties_url": {
 						"value": "[parameters('LS_DATALAKE_HC_properties_typeProperties_url')]"
+					},
+					"LINKED-CONEX-INSTRUCTOR_properties_typeProperties_linkedInfo_resourceId": {
+						"value": "[parameters('LINKED-CONEX-INSTRUCTOR_properties_typeProperties_linkedInfo_resourceId')]"
 					}
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "adf-henry-cabrera_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"LS_FILESYSTEM1_password": {
+						"value": "[parameters('LS_FILESYSTEM1_password')]"
+					},
+					"LS_POSTGRES_EXTERNO_connectionString": {
+						"value": "[parameters('LS_POSTGRES_EXTERNO_connectionString')]"
+					},
+					"LS_FILESYSTEM1_properties_typeProperties_host": {
+						"value": "[parameters('LS_FILESYSTEM1_properties_typeProperties_host')]"
+					},
+					"LS_FILESYSTEM1_properties_typeProperties_userId": {
+						"value": "[parameters('LS_FILESYSTEM1_properties_typeProperties_userId')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'adf-henry-cabrera_ArmTemplate_0')]"
+			]
 		}
 	]
 }

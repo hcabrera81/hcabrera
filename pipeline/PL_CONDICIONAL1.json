@@ -6,7 +6,24 @@
 				"name": "If Condition1",
 				"type": "IfCondition",
 				"dependsOn": [],
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"ifTrueActivities": [
+						{
+							"name": "Set esPar",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "resultado",
+								"value": {
+									"value": "EL numero @{pipeline().parameters.numero} es variables('resultado')",
+									"type": "Expression"
+								}
+							}
+						}
+					]
+				}
 			},
 			{
 				"name": "Set variable1",

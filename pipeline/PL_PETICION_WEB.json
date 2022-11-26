@@ -33,7 +33,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "diasemana",
-					"value": "@string(activity('Web1').output)"
+					"value": {
+						"value": "@string(activity('Web1').output.dayOfTheWeek)",
+						"type": "Expression"
+					}
 				}
 			}
 		],

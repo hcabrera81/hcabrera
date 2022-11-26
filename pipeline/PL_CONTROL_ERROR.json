@@ -120,7 +120,7 @@
 				"userProperties": []
 			},
 			{
-				"name": "Script1",
+				"name": "Registrar Exito",
 				"type": "Script",
 				"dependsOn": [
 					{
@@ -156,7 +156,7 @@
 				}
 			},
 			{
-				"name": "Script1_copy1",
+				"name": "Registrar Fallo",
 				"type": "Script",
 				"dependsOn": [
 					{

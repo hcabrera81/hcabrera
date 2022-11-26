@@ -1,0 +1,12 @@
+{
+	"name": "LS_REST_CLIENTE",
+	"properties": {
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "https://gorest.co.in/public/v2/users",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}

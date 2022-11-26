@@ -34,6 +34,26 @@
 					},
 					"waitOnCompletion": true
 				}
+			},
+			{
+				"name": "PL_CONSULTA_SHAREPOINTA",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "PL_COPIA_REST",
+						"dependencyConditions": [
+							"Skipped"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "PL_CONSULTA_SHAREPOINTA",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
 			}
 		],
 		"folder": {

@@ -7,7 +7,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Lookup1",
+						"activity": "RegistrarInicio",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -101,13 +101,13 @@
 				"typeProperties": {
 					"variableName": "resultado",
 					"value": {
-						"value": "@string(activity('Copy data1').output.errors)",
+						"value": "@{replace(string(activity('Copy data1').output.errors),'''','''''')}",
 						"type": "Expression"
 					}
 				}
 			},
 			{
-				"name": "Lookup1",
+				"name": "RegistrarInicio",
 				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
@@ -183,7 +183,7 @@
 						{
 							"type": "Query",
 							"text": {
-								"value": "UPDATE LOG_EJECUCION\n\nSET fechaFin =GETDATE()\n\n, cantidadCopiada =@{activity('Copy data1').output.rowsCopied}\n\n, billingReference='@{activity('Copy data1').output.billingReference}'\n\nWHERE idEjecucion=@{activity('RegistrarInicio').output.firstRow.idEjecucion}",
+								"value": "UPDATE LOG_EJECUCION\n\nSET fechaFin =GETDATE()\n\n, estado ='FALLIDO'\n\n, error='@{variables('resultado')}'\n\nWHERE idEjecucion=@{activity('RegistrarInicio').output.firstRow.idEjecucion}",
 								"type": "Expression"
 							}
 						}

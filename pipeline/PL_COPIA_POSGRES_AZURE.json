@@ -20,11 +20,22 @@
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
 					"enableStaging": false
 				},
 				"inputs": [
 					{
 						"referenceName": "DS_AZURE_INPUT",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_AZURE_SQL_OUT",
 						"type": "DatasetReference"
 					}
 				]

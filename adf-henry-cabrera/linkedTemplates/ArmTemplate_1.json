@@ -4,16 +4,16 @@
 	"parameters": {
 		"factoryName": {
 			"type": "string",
-			"metadata": "Nombre de instancia de Data Factory",
+			"metadata": "Data Factory name",
 			"defaultValue": "adf-henry-cabrera"
 		},
 		"LS_FILESYSTEM1_password": {
 			"type": "secureString",
-			"metadata": "Cadena protegida para \"password\"de \"LS_FILESYSTEM1\""
+			"metadata": "Secure string for 'password' of 'LS_FILESYSTEM1'"
 		},
 		"LS_POSTGRES_EXTERNO_connectionString": {
 			"type": "secureString",
-			"metadata": "Cadena protegida para \"connectionString\"de \"LS_POSTGRES_EXTERNO\""
+			"metadata": "Secure string for 'connectionString' of 'LS_POSTGRES_EXTERNO'"
 		},
 		"LS_FILESYSTEM1_properties_typeProperties_host": {
 			"type": "string",
@@ -22,12 +22,203 @@
 		"LS_FILESYSTEM1_properties_typeProperties_userId": {
 			"type": "string",
 			"defaultValue": "GRAIMAN\\hcabrera"
+		},
+		"LS_SHAREPOINT_CONSTRUSEC_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "9efbefdf-96ae-4db1-b608-39b132d58d82"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_JSON_CLIENTES')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_DATALAKE_HC",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Clientes.json",
+						"fileSystem": "aci-tmp"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "integer"
+						},
+						"name": {
+							"type": "string"
+						},
+						"email": {
+							"type": "string"
+						},
+						"gender": {
+							"type": "string"
+						},
+						"status": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_PARQUET_FACTURA')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_DATALAKE_HC",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "FACTURAS",
+						"fileSystem": "hcabrera"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "idFactura",
+						"type": "INT32"
+					},
+					{
+						"name": "idCliente",
+						"type": "INT32"
+					},
+					{
+						"name": "idEmpleado",
+						"type": "INT32"
+					},
+					{
+						"name": "fechaFactura",
+						"type": "INT96"
+					},
+					{
+						"name": "subtotal",
+						"type": "DECIMAL",
+						"precision": 15,
+						"scale": 2
+					},
+					{
+						"name": "impuestos",
+						"type": "DECIMAL",
+						"precision": 15,
+						"scale": 2
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_PARQUET_GENERICO_HC')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_DATALAKE_HC",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"directorio": {
+						"type": "string"
+					},
+					"nombrearchivo": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().nombrearchivo",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@dataset().directorio",
+							"type": "Expression"
+						},
+						"fileSystem": "hcabrera"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_PARQUET_OUT')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_DATALAKE_HC",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "ejemploComp.parquet",
+						"folderPath": "ARCHIVOS_LOCALES",
+						"fileSystem": "hcabrera"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_REST_CLIENTES')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_REST_CLIENTE",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_SUCURSAL')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AZURE_SQL",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/DS_TABLE_OUTPUT')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
@@ -85,6 +276,261 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_SHAREPOINT_CONSTRUSEC')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "SITIO SHAREPOINT CONSTRUSEC PIPELINE ADMIN",
+				"annotations": [],
+				"type": "SharePointOnlineList",
+				"typeProperties": {
+					"siteUrl": "https://jvasquezgraiman.sharepoint.com/sites/GT-Construsec",
+					"tenantId": "9db1434a-6665-4aba-a06d-96089310a627",
+					"servicePrincipalId": "[parameters('LS_SHAREPOINT_CONSTRUSEC_properties_typeProperties_servicePrincipalId')]",
+					"servicePrincipalKey": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "LS_AZURE_VAULT",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "app-key-sharepoint"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_CONTROL_ERROR')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "RegistrarInicio",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "SELECT 1 as dummy",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_AZURE_INPUT",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_PARQUET_GENERICO_HC",
+								"type": "DatasetReference",
+								"parameters": {
+									"directorio": "ERRORES",
+									"nombrearchivo": "DEMO_ERROR.parquet"
+								}
+							}
+						]
+					},
+					{
+						"name": "Set exito",
+						"description": "ejecucion exitosa",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Copy data1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "resultado",
+							"value": {
+								"value": "Cantidad Copiada : @{activity('Copy data1').output.rowsCopied}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Set error",
+						"description": "fallo ejecuciion",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Copy data1",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "resultado",
+							"value": {
+								"value": "@{replace(string(activity('Copy data1').output.errors),'''','''''')}",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "RegistrarInicio",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": {
+									"value": "INSERT LOG_EJECUCION(workspace,nombrePipline ,fechaInicio, estado)\n\n  OUTPUT inserted.idEjecucion\n\n  VALUES ('@{pipeline().DataFactory}','@{pipeline().Pipeline}', GETDATE(), 'INICIADO');",
+									"type": "Expression"
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "DS_AZURE_INPUT",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "Registrar Exito",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Set exito",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "LS_AZURE_SQL",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": {
+										"value": "UPDATE LOG_EJECUCION\n\nSET fechaFin =GETDATE()\n\n, cantidadCopiada =@{activity('Copy data1').output.rowsCopied}\n\n, billingReference='@{activity('Copy data1').output.billingReference}'\n\nWHERE idEjecucion=@{activity('RegistrarInicio').output.firstRow.idEjecucion}",
+										"type": "Expression"
+									}
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
+					},
+					{
+						"name": "Registrar Fallo",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Set error",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "LS_AZURE_SQL",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": {
+										"value": "UPDATE LOG_EJECUCION\n\nSET fechaFin =GETDATE()\n\n, estado ='FALLIDO'\n\n, error='@{variables('resultado')}'\n\nWHERE idEjecucion=@{activity('RegistrarInicio').output.firstRow.idEjecucion}",
+										"type": "Expression"
+									}
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"resultado": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Web Services"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_PARQUET_GENERICO_HC')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/PL_COPIAR_ARCHIVO')]",
@@ -154,6 +600,292 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/DS_TABLE_OUTPUT')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_COPIA_JSON')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "JsonSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "JsonReadSettings"
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['id']"
+										},
+										"sink": {
+											"name": "id",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"path": "$['name']"
+										},
+										"sink": {
+											"name": "name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['gender']"
+										},
+										"sink": {
+											"name": "gender",
+											"type": "String"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_JSON_CLIENTES",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_PARQUET_GENERICO_HC",
+								"type": "DatasetReference",
+								"parameters": {
+									"directorio": "JSON",
+									"nombrearchivo": "CLIENTES.parquet"
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "Web Services"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_JSON_CLIENTES')]",
+				"[concat(variables('factoryId'), '/datasets/DS_PARQUET_GENERICO_HC')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_COPIA_POSGRES_AZURE')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_AZURE_INPUT",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_AZURE_SQL_OUT",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "Web Services"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_COPIA_REST')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['id']"
+										},
+										"sink": {
+											"name": "id",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"path": "$['name']"
+										},
+										"sink": {
+											"name": "name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['email']"
+										},
+										"sink": {
+											"name": "email",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['gender']"
+										},
+										"sink": {
+											"name": "gender",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['status']"
+										},
+										"sink": {
+											"name": "status",
+											"type": "String"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_REST_CLIENTES",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_PARQUET_GENERICO_HC",
+								"type": "DatasetReference",
+								"parameters": {
+									"directorio": "REST",
+									"nombrearchivo": "CLIENTES.parquet"
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "Web Services"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_REST_CLIENTES')]",
+				"[concat(variables('factoryId'), '/datasets/DS_PARQUET_GENERICO_HC')]"
 			]
 		},
 		{
@@ -232,7 +964,8 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_TABLE_OUTPUT')]"
+				"[concat(variables('factoryId'), '/datasets/DS_TABLE_OUTPUT')]",
+				"[concat(variables('factoryId'), '/datasets/DS_PARQUET_OUT')]"
 			]
 		},
 		{
@@ -411,7 +1144,29 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_TABLE_OUTPUT')]"
+				"[concat(variables('factoryId'), '/datasets/DS_TABLE_OUTPUT')]",
+				"[concat(variables('factoryId'), '/datasets/DS_PARQUET_GENERICO_HC')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_CLIENTS_POSTGRES')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_POSTGRES_EXTERNO",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "PostgreSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "public",
+					"table": "clientes_pg"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_POSTGRES_EXTERNO')]"
 			]
 		},
 		{
@@ -518,105 +1273,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_FILESYSTEM1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_INPUT_CLIENTES')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_POSTGRES_EXTERNO",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "EXTERNOS"
-				},
-				"annotations": [],
-				"type": "PostgreSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "public",
-					"table": "clientes_pg"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_POSTGRES_EXTERNO')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_COPIAR_ARCHIVOS')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy data1",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "ExcelSource",
-								"storeSettings": {
-									"type": "FileServerReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								}
-							},
-							"sink": {
-								"type": "ParquetSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "ParquetWriteSettings"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "DS_FILESYSTEM_INPUT",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "DS_PARQUET_OUT",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"folder": {
-					"name": "INTERACCION Y FLUJO"
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_FILESYSTEM_INPUT')]"
 			]
 		}
 	]

@@ -4,16 +4,16 @@
 	"parameters": {
 		"factoryName": {
 			"type": "string",
-			"metadata": "Nombre de instancia de Data Factory",
+			"metadata": "Data Factory name",
 			"defaultValue": "adf-henry-cabrera"
 		},
 		"LS_AZURE_SQL_connectionString": {
 			"type": "secureString",
-			"metadata": "Cadena protegida para \"connectionString\"de \"LS_AZURE_SQL\""
+			"metadata": "Secure string for 'connectionString' of 'LS_AZURE_SQL'"
 		},
 		"LS_DATALAKE_HC_accountKey": {
 			"type": "secureString",
-			"metadata": "Cadena protegida para \"accountKey\"de \"LS_DATALAKE_HC\""
+			"metadata": "Secure string for 'accountKey' of 'LS_DATALAKE_HC'"
 		},
 		"LS_AZURE_VAULT_properties_typeProperties_baseUrl": {
 			"type": "string",
@@ -22,6 +22,10 @@
 		"LS_DATALAKE_HC_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://dlscursogrm.dfs.core.windows.net/"
+		},
+		"LS_REST_CLIENTE_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://gorest.co.in/public/v2/users"
 		},
 		"LINKED-CONEX-INSTRUCTOR_properties_typeProperties_linkedInfo_resourceId": {
 			"type": "string",
@@ -106,9 +110,6 @@
 				"variables": {
 					"resultado": {
 						"type": "String"
-					},
-					"var": {
-						"type": "String"
 					}
 				},
 				"folder": {
@@ -175,9 +176,6 @@
 				},
 				"variables": {
 					"resultado": {
-						"type": "String"
-					},
-					"var": {
 						"type": "String"
 					}
 				},
@@ -413,6 +411,67 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/PL_PETICION_WEB')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Web1",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "http://worldclockapi.com/api/json/utc/now",
+							"method": "GET",
+							"headers": {}
+						}
+					},
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Web1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "diasemana",
+							"value": {
+								"value": "@string(activity('Web1').output.dayOfTheWeek)",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"diasemana": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Web Services"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/PL_SWITCH')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -615,6 +674,21 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/LS_REST_CLIENTE')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "RestService",
+				"typeProperties": {
+					"url": "[parameters('LS_REST_CLIENTE_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/IR-CONEXION-LOCAL')]",
 			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
 			"apiVersion": "2018-06-01",
@@ -745,7 +819,31 @@
 				"annotations": [],
 				"type": "AzureSqlTable",
 				"schema": [],
-				"typeProperties": {}
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Cliente"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AZURE_SQL')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_AZURE_SQL_OUT')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AZURE_SQL",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Cliente"
+				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_AZURE_SQL')]"
@@ -771,126 +869,6 @@
 						"fileSystem": "hcabrera"
 					},
 					"firstRowAsHeader": true
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_DATALAKE_HC')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_PARQUET_FACTURA')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_DATALAKE_HC",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Parquet",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": "FACTURAS",
-						"fileSystem": "hcabrera"
-					},
-					"compressionCodec": "snappy"
-				},
-				"schema": [
-					{
-						"name": "idFactura",
-						"type": "INT32"
-					},
-					{
-						"name": "idCliente",
-						"type": "INT32"
-					},
-					{
-						"name": "idEmpleado",
-						"type": "INT32"
-					},
-					{
-						"name": "fechaFactura",
-						"type": "INT96"
-					},
-					{
-						"name": "subtotal",
-						"type": "DECIMAL",
-						"precision": 15,
-						"scale": 2
-					},
-					{
-						"name": "impuestos",
-						"type": "DECIMAL",
-						"precision": 15,
-						"scale": 2
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_DATALAKE_HC')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_PARQUET_GENERICO_HC')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_DATALAKE_HC",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"directorio": {
-						"type": "string"
-					},
-					"nombrearchivo": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "Parquet",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": {
-							"value": "@dataset().nombrearchivo",
-							"type": "Expression"
-						},
-						"folderPath": {
-							"value": "@dataset().directorio",
-							"type": "Expression"
-						},
-						"fileSystem": "hcabrera"
-					},
-					"compressionCodec": "snappy"
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_DATALAKE_HC')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_PARQUET_OUT')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_DATALAKE_HC",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Parquet",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "ejemploComp.parquet",
-						"folderPath": "ARCHIVOS_LOCALES",
-						"fileSystem": "hcabrera"
-					},
-					"compressionCodec": "snappy"
 				},
 				"schema": []
 			},

@@ -117,7 +117,19 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "INSERT LOG_EJECUCION(workspace,nombrePipline ,fechaInicio, estado)\n\n  OUTPUT inserted.idEjecucion\n\n  VALUES ('@{pipeline().DataFactory}','@{pipeline().Pipeline}', GETDATE(), 'INICIADO');",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "DS_AZURE_INPUT",
+						"type": "DatasetReference"
+					}
+				}
 			},
 			{
 				"name": "Registrar Exito",

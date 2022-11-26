@@ -1,0 +1,99 @@
+{
+	"name": "PL_CONTROL_ERROR",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT 1 as dummy",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_AZURE_INPUT",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_PARQUET_GENERICO_HC",
+						"type": "DatasetReference",
+						"parameters": {
+							"directorio": "ERRORES",
+							"nombrearchivo": "DEMO_ERROR.parquet"
+						}
+					}
+				]
+			},
+			{
+				"name": "Set exito",
+				"description": "ejecucion exitosa",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Copy data1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": []
+			},
+			{
+				"name": "Set error",
+				"description": "fallo ejecuciion",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Copy data1",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": []
+			}
+		],
+		"variables": {
+			"resultado": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Web Services"
+		},
+		"annotations": []
+	}
+}

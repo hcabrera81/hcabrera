@@ -87,7 +87,11 @@
 						]
 					}
 				],
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "resultado",
+					"value": "Cantidad Copiada : @{activity('Copy data1').output.rowsCopied}"
+				}
 			}
 		],
 		"variables": {

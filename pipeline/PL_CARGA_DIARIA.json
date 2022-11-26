@@ -1,0 +1,44 @@
+{
+	"name": "PL_CARGA_DIARIA",
+	"properties": {
+		"activities": [
+			{
+				"name": "PL_PETICION_WEB",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "PL_PETICION_WEB",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "PL_COPIA_REST",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "PL_PETICION_WEB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "PL_COPIA_REST",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "Web Services"
+		},
+		"annotations": []
+	}
+}

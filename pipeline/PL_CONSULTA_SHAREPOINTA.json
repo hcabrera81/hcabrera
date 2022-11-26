@@ -22,7 +22,8 @@
 					"dataset": {
 						"referenceName": "DS_SHAREPOINT_CONSTRUSEC",
 						"type": "DatasetReference"
-					}
+					},
+					"firstRowOnly": false
 				}
 			}
 		],

@@ -17,6 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "SharePointOnlineListSource",
+						"query": "$select=DireccionCity, RUC,\nNombre_Contacto1\n&$filter=DireccionCity eq 'Guayaquil'",
 						"httpRequestTimeout": "00:05:00"
 					},
 					"dataset": {

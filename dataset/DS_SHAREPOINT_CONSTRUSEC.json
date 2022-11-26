@@ -1,0 +1,15 @@
+{
+	"name": "DS_SHAREPOINT_CONSTRUSEC",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SHAREPOINT_CONSTRUSEC",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SharePointOnlineListResource",
+		"schema": [],
+		"typeProperties": {
+			"listName": "Clientes_potenciales"
+		}
+	}
+}

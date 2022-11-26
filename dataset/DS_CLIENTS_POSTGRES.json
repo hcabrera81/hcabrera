@@ -1,0 +1,16 @@
+{
+	"name": "DS_CLIENTS_POSTGRES",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_POSTGRES_EXTERNO",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "PostgreSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "public",
+			"table": "clientes_pg"
+		}
+	}
+}

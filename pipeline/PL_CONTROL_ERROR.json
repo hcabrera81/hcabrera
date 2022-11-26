@@ -1,0 +1,217 @@
+{
+	"name": "PL_CONTROL_ERROR",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "RegistrarInicio",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT 1 as dummy",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_AZURE_INPUT",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_PARQUET_GENERICO_HC",
+						"type": "DatasetReference",
+						"parameters": {
+							"directorio": "ERRORES",
+							"nombrearchivo": "DEMO_ERROR.parquet"
+						}
+					}
+				]
+			},
+			{
+				"name": "Set exito",
+				"description": "ejecucion exitosa",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Copy data1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "resultado",
+					"value": {
+						"value": "Cantidad Copiada : @{activity('Copy data1').output.rowsCopied}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set error",
+				"description": "fallo ejecuciion",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Copy data1",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "resultado",
+					"value": {
+						"value": "@{replace(string(activity('Copy data1').output.errors),'''','''''')}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "RegistrarInicio",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "INSERT LOG_EJECUCION(workspace,nombrePipline ,fechaInicio, estado)\n\n  OUTPUT inserted.idEjecucion\n\n  VALUES ('@{pipeline().DataFactory}','@{pipeline().Pipeline}', GETDATE(), 'INICIADO');",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "DS_AZURE_INPUT",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Registrar Exito",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Set exito",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "LS_AZURE_SQL",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": {
+								"value": "UPDATE LOG_EJECUCION\n\nSET fechaFin =GETDATE()\n\n, cantidadCopiada =@{activity('Copy data1').output.rowsCopied}\n\n, billingReference='@{activity('Copy data1').output.billingReference}'\n\nWHERE idEjecucion=@{activity('RegistrarInicio').output.firstRow.idEjecucion}",
+								"type": "Expression"
+							}
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			},
+			{
+				"name": "Registrar Fallo",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Set error",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "LS_AZURE_SQL",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": {
+								"value": "UPDATE LOG_EJECUCION\n\nSET fechaFin =GETDATE()\n\n, estado ='FALLIDO'\n\n, error='@{variables('resultado')}'\n\nWHERE idEjecucion=@{activity('RegistrarInicio').output.firstRow.idEjecucion}",
+								"type": "Expression"
+							}
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			}
+		],
+		"variables": {
+			"resultado": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Web Services"
+		},
+		"annotations": []
+	}
+}

@@ -1,0 +1,21 @@
+{
+	"name": "LS_SHAREPOINT_CONSTRUSEC",
+	"properties": {
+		"description": "SITIO SHAREPOINT CONSTRUSEC PIPELINE ADMIN",
+		"annotations": [],
+		"type": "SharePointOnlineList",
+		"typeProperties": {
+			"siteUrl": "https://jvasquezgraiman.sharepoint.com/sites/GT-Construsec",
+			"tenantId": "9db1434a-6665-4aba-a06d-96089310a627",
+			"servicePrincipalId": "9efbefdf-96ae-4db1-b608-39b132d58d82",
+			"servicePrincipalKey": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "LS_AZURE_VAULT",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "app-key-sharepoint"
+			}
+		}
+	}
+}

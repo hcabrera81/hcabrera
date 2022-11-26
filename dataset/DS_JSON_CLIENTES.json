@@ -1,0 +1,38 @@
+{
+	"name": "DS_JSON_CLIENTES",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_DATALAKE_HC",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Clientes.json",
+				"fileSystem": "aci-tmp"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "integer"
+				},
+				"name": {
+					"type": "string"
+				},
+				"email": {
+					"type": "string"
+				},
+				"gender": {
+					"type": "string"
+				},
+				"status": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}

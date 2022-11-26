@@ -18,8 +18,30 @@
 					"url": "http://worldclockapi.com/api/json/utc/now",
 					"method": "GET"
 				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Web1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "diasemana",
+					"value": "@string(activity('Web1').output)"
+				}
 			}
 		],
+		"variables": {
+			"diasemana": {
+				"type": "String"
+			}
+		},
 		"folder": {
 			"name": "Web Services"
 		},

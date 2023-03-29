@@ -16,6 +16,9 @@
 			"transformations": [
 				{
 					"name": "Filtro1910to2000"
+				},
+				{
+					"name": "AggrbyAnio"
 				}
 			],
 			"scriptLines": [
@@ -30,7 +33,9 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> ObtenerDLMovies",
-				"ObtenerDLMovies filter(ERROR_FUNCTION('')) ~> Filtro1910to2000"
+				"ObtenerDLMovies filter(toInteger(year) >= 1910 && toInteger(year) <= 2000) ~> Filtro1910to2000",
+				"Filtro1910to2000 aggregate(groupBy(year),",
+				"     year = ERROR_FUNCTION('')) ~> AggrbyAnio"
 			]
 		}
 	}

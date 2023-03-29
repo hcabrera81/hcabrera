@@ -35,7 +35,7 @@
 				"     ignoreNoFilesFound: false) ~> ObtenerDLMovies",
 				"ObtenerDLMovies filter(toInteger(year) >= 1910 && toInteger(year) <= 2000) ~> Filtro1910to2000",
 				"Filtro1910to2000 aggregate(groupBy(year),",
-				"     year = ERROR_FUNCTION('')) ~> AggrbyAnio"
+				"     year = avg(toInteger(Rating))) ~> AggrbyAnio"
 			]
 		}
 	}
